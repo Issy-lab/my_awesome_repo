@@ -1,0 +1,18 @@
+---
+# tasks file for actions
+    - name: Create a directory
+      win_file:
+        path: "{{ path }}"
+        state: directory
+    - name: Download latest runner package
+      ansible.windows.win_powershell:
+        script: |
+          cd "{{ path }}"
+          Invoke-WebRequest -Uri https://github.com/actions/runner/releases/download/v2.287.1/actions-runner-win-x64-2.287.1.zip -OutFile actions-runner-win-x64-2.287.1.zip
+          if((Get-FileHash -Path actions-runner-win-x64-2.287.1.zip -Algorithm SHA256).Hash.ToUpper() -ne '91f8ab7837b2968328fa04fa14ec8f18767b0dfa12b2b293e77cf36ee6d33673'.ToUpper()){ throw 'Computed checksum did not match' }
+          Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/actions-runner-win-x64-2.287.1.zip", "$PWD")
+          ./config.cmd --url "{{ url }}" --token "{{ personal_token }}"
+    - name: remove directory
+      win_file:
+        path: "{{ path }}"
+        state: absent

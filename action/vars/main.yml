@@ -1,0 +1,6 @@
+---
+# vars file for actions
+
+path: C:\actions-runner
+personal_token : "ANWX66PXK7NYRNAFN6OTEJDCED6QS"
+url : "https://github.com/Issy-lab/actions"

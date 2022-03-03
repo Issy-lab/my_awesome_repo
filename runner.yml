@@ -1,0 +1,7 @@
+---
+
+- hosts: win
+  tasks:
+    - name: Starting role actions
+      include_role:
+        name: actions
